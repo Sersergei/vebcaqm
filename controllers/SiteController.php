@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Image;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -129,12 +130,9 @@ class SiteController extends Controller
         exit(json_encode(["image" => file_get_contents("./now.png")], JSON_UNESCAPED_UNICODE));
     }
     public function actionSave(){
-        $data = $_REQUEST["data"]; // получаем изображение
-        $fh = fopen("now.png", "w+"); // создаем и открываем файл с изображением
-        $save = fwrite($fh, $data); // записываем данные в него
-        fclose($fh); // закрываем файл
-
-        exit(json_encode(["success" => !!$save, "time" => time()]));
+        $this->enableCsrfValidation = false;
+        $img=new Image([user_id=>1],$_REQUEST["data"]);
+        echo array(["success" => $img->SaveImage(), "time" => time()]);
     }
     public function actionTranslate(){
         return $this->render('translate');

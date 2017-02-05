@@ -21,7 +21,8 @@ var ajax = {
         ajax.init("GET", url + "?" + ajax._params(params), null, callback)
     },
     post: function (url, params, callback) {
-        ajax.init("POST", url, params, callback);
+        jQuery.post(url,params,callback);
+
     },
     _params: function (params) {
         if (typeof params === "string" || params == null)
@@ -89,15 +90,15 @@ var Media = {
         Media.ctx.fillStyle = "black";
         Media.ctx.fillText(date, 10, Media.canvas.height - 15);
 
-        return Media.canvas.toDataURL("image/jpeg", .9);
+        return Media.canvas.toDataURL("image/png", .9);
     },
     save: function (data) {
-        ajax.post("save.php", {
+        ajax.post("save", {
             data: data
         }, function (data) {
             Media.save(Media.getImage());
             if (data.success)
-                g("time").innerHTML = "Время: " + (new Date(data.time * 1000).toLocaleString());
+                g("time").innerHTML = "Время: " + (new Date(data.time * 100000).toLocaleString());
         });
     },
     onError: function(error) {
